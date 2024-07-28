@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from models.user import User as userMD, Item as itemMD
-from schemas.user import UserUpdate, UserCreate, ItemBase, Item
+from schemas.user import UserUpdate, UserCreate, ItemBase
 from fastapi import APIRouter
 
 user_router = APIRouter()
