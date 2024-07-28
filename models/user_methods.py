@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from models.user import User as userMD
-from schemas.user import UserUpdate, UserCreate
+from models.user import User as userMD, Item as itemMD
+from schemas.user import UserUpdate, UserCreate, ItemBase, Item
 from fastapi import APIRouter
 
 user_router = APIRouter()
@@ -44,3 +44,11 @@ def delete_user(db: Session, user_id: int):
     db.delete(user_in_db)
     db.commit()
     return True
+
+
+def create_item(db: Session, item: ItemBase, user_id: int):
+    db_item = itemMD(title=item.title, description=item.description , owner_id=user_id)
+    db.add(db_item)
+    db.commit()
+    db.refresh(db_item)
+    return db_item

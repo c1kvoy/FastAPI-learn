@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "pythonproject1"
+name = "np"
 version = "0.1.0"
 description = ""
 authors = ["c1kvoy <seva33039@gmail.com>"]
@@ -7,13 +7,10 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
-fastapi = "^0.111.1"
-uvicorn = "^0.30.3"
-email-validator = "^2.2.0"
-python-multipart = "^0.0.9"
 sqlalchemy = "^2.0.31"
-aiosqlite = "^0.20.0"
-pydantic-settings = "^2.3.4"
+fastapi = "^0.111.1"
+pydantic = "^2.8.2"
+uvicorn = "^0.30.3"
 
 
 [build-system]
