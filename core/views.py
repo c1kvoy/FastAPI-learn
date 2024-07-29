@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Depends
+from fastapi.exceptions import HTTPException as FastAPIHTTPException
 from core.models import Product as ProductModel, Base
 from core.schemas import Product as ProductSchema
 from core.methods import *
@@ -21,4 +22,6 @@ def read_root():
 @app.post("/product/create", response_model=ProductSchema)
 def create_item_rout(product: ProductSchema, db=Depends(get_db)):
     db_product = create_product(product, db)
+    if not db_product:
+        raise FastAPIHTTPException(status_code=404, detail=f"Ошибка")
     return db_product
