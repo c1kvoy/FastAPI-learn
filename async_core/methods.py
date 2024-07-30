@@ -49,13 +49,18 @@ async def delete_product(name: str, db: AsyncSession) -> bool:
     return True
 
 
-async def get_products(db: AsyncSession) -> List[ProductToShareSchema]:
-    query = (
-        future_select(ProductModel)
-        .join(TransactionModel, ProductModel.id == TransactionModel.product_id)
-    )
+async def get_products(db: AsyncSession):
+    query = select(ProductModel.product_name, TransactionModel.count).join(TransactionModel,
+                                                              ProductModel.id == TransactionModel.product_id)
     result = await db.execute(query)
-    if result is None:
-        return None
-    else:
-        return result.scalars().all()
+    rows = result.fetchall()
+    products_with_counts = []
+    for row in rows:
+        product = row[0]
+        count = row[1]
+        products_with_counts.append({
+            "product": product,
+            "count": count
+        })
+
+    return products_with_counts
