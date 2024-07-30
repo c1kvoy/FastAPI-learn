@@ -3,7 +3,7 @@ from typing import List
 from fastapi import FastAPI, Depends
 from fastapi.exceptions import HTTPException as FastAPIHTTPException
 from .models import Product as ProductModel, Base
-from .schemas import Product as ProductSchema
+from .schemas import Product as ProductSchema, ProductToShare as ProductToShareSchema
 from .methods import *
 from .db import Session_async, engine
 

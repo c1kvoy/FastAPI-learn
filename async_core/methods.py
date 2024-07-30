@@ -1,7 +1,9 @@
+from typing import List
+
 from sqlalchemy.ext.asyncio import AsyncSession
 from .models import Product as ProductModel, Transaction as TransactionModel
-from .schemas import Product as ProductSchema, Transaction as TransactionSchema
-from sqlalchemy import update, delete
+from .schemas import Product as ProductSchema, Transaction as TransactionSchema, ProductToShare as ProductToShareSchema
+from sqlalchemy import update, delete, select
 from sqlalchemy.future import select as future_select
 
 
@@ -47,8 +49,11 @@ async def delete_product(name: str, db: AsyncSession) -> bool:
     return True
 
 
-async def get_products(db: AsyncSession):
-    query = future_select(ProductModel).join(TransactionModel).where(ProductModel.id == TransactionModel.product_id)
+async def get_products(db: AsyncSession) -> List[ProductToShareSchema]:
+    query = (
+        future_select(ProductModel)
+        .join(TransactionModel, ProductModel.id == TransactionModel.product_id)
+    )
     result = await db.execute(query)
     if result is None:
         return None
