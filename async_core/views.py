@@ -1,3 +1,5 @@
+from typing import List
+
 from fastapi import FastAPI, Depends
 from fastapi.exceptions import HTTPException as FastAPIHTTPException
 from .models import Product as ProductModel, Base
@@ -13,7 +15,6 @@ async def create_tables():
         await conn.run_sync(Base.metadata.create_all)
 
 
-# Запускаем создание таблиц при старте приложения
 @app.on_event("startup")
 async def on_startup():
     await create_tables()
@@ -44,6 +45,16 @@ async def read_item_by_name_rout(name: str, db=Depends(get_db)):
         raise FastAPIHTTPException(status_code=404, detail=f"Product with {name} not found")
     else:
         return db_product
+
+
+@app.get("/products", tags=["product"], name="products by transaction")
+async def read_all_products(db=Depends(get_db)):
+    """This router response product, which was in transaction"""
+    results = await get_products(db)
+    if not results:
+        return {"status": "No transaction now"}
+    else:
+        return results
 
 
 @app.patch("/product/{product_name}/update", response_model=ProductSchema, tags=["product"])
